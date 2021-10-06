@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import operator
 from collections import Counter
+from PIL import Image
 
 #First formula
 def rgb_to_gray(img):
@@ -60,8 +61,22 @@ for i in range(len(gray2)):
     for j in range(len(gray2[i])):
         pixels_2.append(gray2[i][j][0])
 
+pixels_3 = []
 #First and second image diffrence
-diff = list(map(operator.sub, gray, gray2))
+tt = np.asarray(gray).astype(int)
+tt2 = np.asarray(gray2).astype(int)
+temp = tt - tt2
+temp = np.absolute(temp)
+temp = temp.astype(np.uint8)*10
+diff = Image.fromarray(temp)
+for i in range(len(temp)):
+    for j in range(len(temp[i])):
+        pixels_3.append(temp[i][j][0])
+
+ctr2 = Counter(pixels_3)
+print(type(temp[1][1][1]))
+
+#diff = ImageChops.difference(gray,gray2)
 
 #Printing out results
 f, arr = plt.subplots(3,2)
@@ -71,6 +86,8 @@ arr[1][0].bar(ctr.keys(),ctr.values())
 ctr = Counter(pixels_2)
 arr[1][1].bar(ctr.keys(),ctr.values())
 arr[2][0].imshow(diff, cmap=plt.get_cmap('gray'), vmin=0, vmax=255)
+arr[2][1].bar(ctr2.keys(),ctr2.values())
+#diff.show()
 plt.show()
 
 
